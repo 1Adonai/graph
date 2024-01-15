@@ -1,0 +1,90 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Run Python Script</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <style>
+        #inputForm {
+            text-align: center;
+        }
+
+        #inputForm label {
+            display: block;
+            margin: 10px 0;
+        }
+
+        #inputForm input {
+            margin-bottom: 10px;
+        }
+
+        #saveButton {
+            margin-top: 10px; /* Добавлено для создания отступа между полем ввода и кнопкой сохранения */
+        }
+    </style>
+</head>
+<body>
+    <form id="inputForm">
+        <label for="number1">A:</label>
+        <input type="number" id="number1" name="number1" required>
+
+        <label for="number2">B:</label>
+        <input type="number" id="number2" name="number2" required>
+
+        <!-- Новое поле -->
+        <label for="number3">C:</label>
+        <input type="number" id="number3" name="number3" required>
+
+        <div id="emptyDiv"></div>
+        
+        <button id="saveButton">Save Numbers</button>
+    </form>
+
+    <button id="runScriptButton">Run Python Script</button>
+    <img src="{% static 'main/img/plot.png' %}" alt="Python Logo">
+
+    <script>
+        $(document).ready(function () {
+            $('#saveButton').click(function (e) {
+                e.preventDefault();
+                var num1 = $('#number1').val();
+                var num2 = $('#number2').val();
+                var num3 = $('#number3').val(); // Добавлено для нового поля
+    
+                $.ajax({
+                    url: '/run_script/',
+                    type: 'GET',
+                    data: { 'number1': num1, 'number2': num2, 'number3': num3 }, // Добавлено для нового поля
+                    success: function (response) {
+                        console.log(response.result);
+                        location.reload();
+                    },
+                    error: function (error) {
+                        console.log(error.responseJSON.error);
+                    }
+                });
+            });
+    
+            $('#runScriptButton').click(function () {
+                // Ваш код для выполнения скрипта
+                // ...
+    
+                $.ajax({
+                    url: '/run_script/',
+                    type: 'GET',
+                    success: function (response) {
+                        console.log(response.result);
+                        location.reload();
+                    },
+                    error: function (error) {
+                        console.log(error.responseJSON.error);
+                    }
+                });
+            });
+        });
+    </script>
+    
+</body>
+</html>
